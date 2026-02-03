@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>Notre Saint-Valentin ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
     
@@ -12,36 +12,47 @@
             --secondary-color: #fd79a8;
             --success-color: #2ecc71;
             --error-color: #e74c3c;
+            --safari-bg: #ffe6fa; /* Couleur de secours pour éviter le blanc */
             --bg-gradient: linear-gradient(135deg, #ffe6fa 0%, #ffc3a0 100%);
             --text-color: #2d3436;
             --white: #ffffff;
         }
 
-        /* BLOQUAGE DU SCROLL ET FIX DU FOND */
-        html, body {
+        /* 1. VERROUILLAGE DU FOND ET DU SCROLL */
+        html {
+            /* On met le fond ici pour qu'il n'y ait JAMAIS de blanc en haut/bas */
+            background: var(--bg-gradient) no-repeat center center fixed;
+            background-color: var(--safari-bg);
+            background-size: cover;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: fixed; /* Bloque le rebond élastique */
+        }
+
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Empêche le scroll */
-            position: fixed; /* Fixe la page pour éviter le rebond iOS */
-            background: var(--bg-gradient);
+            overflow: hidden;
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-family: 'Nunito', sans-serif;
             color: var(--text-color);
+            /* Support des encoches iPhone */
+            padding: env(safe-area-inset-top) 15px env(safe-area-inset-bottom) 15px;
+            /* Empêche toute action de scroll ou zoom par défaut */
+            touch-action: none; 
         }
 
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
-            touch-action: manipulation; /* Désactive le zoom double-tap */
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Support des encoches iPhone */
-            padding: env(safe-area-inset-top) 15px env(safe-area-inset-bottom) 15px;
+            /* On autorise les clics simples mais pas le zoom */
+            touch-action: manipulation; 
         }
 
         .hearts-bg {
@@ -188,14 +199,36 @@
         const nextBtn = document.getElementById('next-btn');
         const progressBar = document.getElementById('progress-bar');
 
-        // Empecher le scroll tactile sur iOS (pour le mode "App")
+        /* 2. SCRIPT ANTI-ZOOM ET ANTI-SCROLL FORCE */
+        
+        // Bloque le scroll tactile
         document.addEventListener('touchmove', function (e) {
-            if (e.scale !== 1) { e.preventDefault(); }
+            e.preventDefault();
         }, { passive: false });
+
+        // Bloque le double-tap zoom (iOS Safari)
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            let now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Bloque le pinch-zoom (zoom à deux doigts)
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        /* 3. LOGIQUE DU QUIZ */
 
         async function loadData() {
             try {
-                const response = await fetch('text.json');
+                // Ajout d'un paramètre aléatoire pour éviter le cache GitHub Pages pendant tes tests
+                const response = await fetch('text.json?v=' + Math.random());
                 quizData = await response.json();
             } catch (e) {
                 alert("Erreur de chargement du fichier JSON.");
@@ -228,7 +261,6 @@
                 const button = document.createElement('button');
                 button.innerText = answer;
                 button.classList.add('btn-opt');
-                // L'index passé ici est 0, 1, 2, 3
                 button.onclick = () => selectAnswer(button, index);
                 answerButtonsEl.appendChild(button);
             });
@@ -244,8 +276,9 @@
             if (isAnswered) return; 
             isAnswered = true;
 
-            // LOGIQUE 1, 2, 3, 4 : On retire 1 au chiffre du JSON pour comparer
-            const correctIndex = quizData[currentQuestionIndex].correct - 1; 
+            // LOGIQUE JSON : 1=réponse1, 2=réponse2...
+            const correctValueInJson = quizData[currentQuestionIndex].correct;
+            const correctIndex = correctValueInJson - 1; 
             const allButtons = answerButtonsEl.querySelectorAll('.btn-opt');
 
             if (index === correctIndex) {
