@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Notre Saint-Valentin ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
     
@@ -17,23 +17,36 @@
             --white: #ffffff;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* BLOQUAGE DU SCROLL ET FIX DU FOND */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Empêche le scroll */
+            position: fixed; /* Fixe la page pour éviter le rebond iOS */
+            background: var(--bg-gradient);
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-color);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; /* Désactive le zoom double-tap */
+        }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            background: var(--bg-gradient);
-            margin: 0;
-            min-height: 100dvh; 
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            color: var(--text-color);
-            padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+            /* Support des encoches iPhone */
+            padding: env(safe-area-inset-top) 15px env(safe-area-inset-bottom) 15px;
         }
 
         .hearts-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0;
         }
 
@@ -43,9 +56,9 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(110dvh) scale(0.5); opacity: 0; }
+            0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
             50% { opacity: 1; }
-            100% { transform: translateY(-10dvh) scale(1.5); opacity: 0; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
 
         .card {
@@ -53,7 +66,8 @@
             padding: 1.5rem;
             border-radius: 30px;
             box-shadow: 0 10px 40px rgba(232, 67, 147, 0.25);
-            width: 92%; max-width: 400px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
             z-index: 10;
             position: relative;
@@ -88,7 +102,6 @@
             width: 100%;
         }
 
-        /* Classes de feedback */
         button.correct {
             background-color: var(--success-color) !important;
             border-color: var(--success-color) !important;
@@ -103,17 +116,14 @@
             opacity: 0.8;
         }
 
-        /* Bouton Suivant */
         #next-btn {
             margin-top: 20px;
             background: var(--primary-color);
             color: white;
             border: none;
-            display: none; /* Caché par défaut */
+            display: none;
             box-shadow: 0 4px 15px rgba(232, 67, 147, 0.4);
         }
-
-        #next-btn:active { transform: scale(0.95); }
 
         .progress-container {
             width: 100%; background-color: #dfe6e9;
@@ -140,7 +150,7 @@
     <div class="card">
         <div id="start-screen">
             <h1>Quiz de l'Amour</h1>
-            <p class="subtitle">Réponds correctement pour que je sache à quel point tu m'aimes Saint-Valentin ! ❤️</p>
+            <p class="subtitle">Réponds correctement pour voir ta surprise de Saint-Valentin ! ❤️</p>
             <button onclick="startQuiz()" style="background: var(--primary-color); color: white;">C'est parti !</button>
         </div>
 
@@ -178,6 +188,11 @@
         const nextBtn = document.getElementById('next-btn');
         const progressBar = document.getElementById('progress-bar');
 
+        // Empecher le scroll tactile sur iOS (pour le mode "App")
+        document.addEventListener('touchmove', function (e) {
+            if (e.scale !== 1) { e.preventDefault(); }
+        }, { passive: false });
+
         async function loadData() {
             try {
                 const response = await fetch('text.json');
@@ -213,6 +228,7 @@
                 const button = document.createElement('button');
                 button.innerText = answer;
                 button.classList.add('btn-opt');
+                // L'index passé ici est 0, 1, 2, 3
                 button.onclick = () => selectAnswer(button, index);
                 answerButtonsEl.appendChild(button);
             });
@@ -228,11 +244,8 @@
             if (isAnswered) return; 
             isAnswered = true;
 
-            // On récupère la valeur du JSON et on fait -1 
-            // Comme ça : si tu as mis 1 dans le JSON, le code test l'index 0 (la 1ère réponse)
-            const correctIndexInJson = quizData[currentQuestionIndex].correct;
-            const correctIndex = correctIndexInJson - 1; 
-            
+            // LOGIQUE 1, 2, 3, 4 : On retire 1 au chiffre du JSON pour comparer
+            const correctIndex = quizData[currentQuestionIndex].correct - 1; 
             const allButtons = answerButtonsEl.querySelectorAll('.btn-opt');
 
             if (index === correctIndex) {
@@ -240,7 +253,6 @@
                 score++;
             } else {
                 selectedBtn.classList.add('wrong');
-                // On montre la bonne réponse en vert
                 if (allButtons[correctIndex]) {
                     allButtons[correctIndex].classList.add('correct');
                 }
@@ -262,7 +274,9 @@
         function showResults() {
             quizScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
-            const percent = Math.round((score / quizData.length) * 100);
+            
+            const total = quizData.length;
+            const percent = Math.round((score / total) * 100);
             document.getElementById('score-percent').innerText = percent + "%";
             progressBar.style.width = "100%";
 
@@ -271,16 +285,16 @@
 
             if (percent === 100) {
                 message = "Impressionnant ! Tu es l'âme sœur parfaite ! 😍";
-                reward = "🏆 24/24 !<br>Tu gagnes une soirée sushi !";
+                reward = `🏆 ${score}/${total} !<br>Tu gagnes une soirée sushi !`;
             } else if (percent >= 80) {
                 message = "On voit que tu m'écoutes quand je parle ! ❤️";
-                reward = "🎁 Un date au resto pour fêter ça !";
+                reward = `🎁 ${score}/${total} !<br>Un date au resto pour fêter ça !`;
             } else if (percent >= 50) {
                 message = "Pas mal, mais il y a des détails à revoir ! 😉";
-                reward = "🍿 Une soirée ciné au choix !";
+                reward = `🍿 ${score}/${total} !<br>Une soirée ciné au choix !`;
             } else {
                 message = "Oups... Il va falloir réviser ! 😂";
-                reward = "🍳 Gage : Tu prends le petit-déjeuner demain !";
+                reward = `🍳 ${score}/${total} !<br>Gage : Tu prépares le petit-déjeuner demain !`;
             }
 
             document.getElementById('feedback-text').innerText = message;
