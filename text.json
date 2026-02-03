@@ -1,0 +1,122 @@
+[
+    {
+        "question": "Quel est le tout premier message que je t'ai envoyé ?",
+        "answers": ["Un simple 'Salut'", "Une blague nulle", "Un compliment sur ta photo", "Un emoji"],
+        "correct": 3
+    },
+    {
+        "question": "Quelle est la destination de notre tout premier voyage ensemble ?",
+        "answers": ["Espagne", "Portugal", "Alsace", "Nancy"],
+        "correct": 2
+    },
+    {
+        "question": "Quel est le premier meuble/objet important qu'on a acheté ?",
+        "answers": ["La machine à café", "L'arbre à chat", "Le matelas", "Le canapé"],
+        "correct": 3
+    },
+    {
+        "question": "Quelle est la manie la plus drôle de notre chat ?",
+        "answers": ["Courir à 3h du matin", "Boire au robinet", "Rapporter ses jouets", "Dormir sur mon visage"],
+        "correct": 1
+    },
+    {
+        "question": "Où avons-nous fait notre première rencontre ?",
+        "answers": ["Au restaurant", "Au centre commercial", "À la maison", "Chez des amis"],
+        "correct": 2
+    },
+    {
+        "question": "Quel est le premier restaurant où l'on a mangé ensemble ?",
+        "answers": ["Indien", "Mcdo", "Italien", "Sushi"],
+        "correct": 3
+    },
+    {
+        "question": "Où avons nous fait notre premier bisou ?",
+        "answers": ["A l'arrêt de bus", "Devant le métro", "Au passage piéton", "Dans le centre commercial"],
+        "correct": 3
+    },
+    {
+        "question": "Quel est le nom que j'utilise le plus pour appeler Gino ?",
+        "answers": ["Gino", "Le chat", "Fils de pute", "minou minou"],
+        "correct": 2
+    },
+    {
+        "question": "À quelle date fête-t-on le prochain moiniverssaire de Gino ?",
+        "answers": ["19 février 2026", "20 février 2026", "21 février 2026", "22 février 2026"],
+        "correct": 2
+    },
+    {
+        "question": "Qui est le premier à s'endormir devant un film le soir ?",
+        "answers": ["Moi, direct", "Toi, au bout de 10 min", "Le chat", "On finit toujours le film"],
+        "correct": 3
+    },
+    {
+        "question": "Quel plat je commande toujours quand on prend à emporter ?",
+        "answers": ["Tacos", "Sushi", "Mcdo", "KFC"],
+        "correct": 1
+    },
+    {
+        "question": "Dans quelle ville se trouve l'endroit où on a pris notre plus belle photo ?",
+        "answers": ["Offwiller", "Dammartin-en-serve", "Deauville", "Villamoura"],
+        "correct": 4
+    },
+    {
+        "question": "Quel est le premier cadeau que je t'ai offert ?",
+        "answers": ["Un bijou", "Un livre", "Un vêtement", "Une expérience"],
+        "correct": 1
+    },
+    {
+        "question": "Combien de temps a duré notre plus long trajet en voiture ?",
+        "answers": ["4 heures", "6 heures", "8 heures", "Plus de 10 heures"],
+        "correct": 4
+    },
+    {
+        "question": "Combien de Noël avons nous fait ensemble ?",
+        "answers": ["1", "2", "3", "4"],
+        "correct": 1
+    },
+    {
+        "question": "Quel est le plus gros fou rire de notre voyage en Alsace ?",
+        "answers": ["Une blague raciste de tonton", "Une blague raciste de Justine", "(°  )ʖ(  °)", "Un tiktok"],
+        "correct": 3
+    },
+    {
+        "question": "Quel est le trait de caractère que je préfère chez toi ?",
+        "answers": ["Ta patience", "Ton ambition", "Ta douceur", "Ta folie"],
+        "correct": 4
+    },
+    {
+        "question": "Qui de nous deux est le plus attentif ?",
+        "answers": ["Moi clairement", "Toi sans hésiter", "On est pareils", "Ça dépend des jours"],
+        "correct": 1
+    },
+    {
+        "question": "Qui de nous deux est le plus bordélique ?",
+        "answers": ["Moi clairement", "Toi sans hésiter", "On est pareils", "Ça dépend des jours"],
+        "correct": 1
+    },
+    {
+        "question": "Quel est l'endroit où on rêve d'aller tous les deux prochainement ?",
+        "answers": ["Japon", "Islande", "Crète", "États-Unis"],
+        "correct": 3
+    },
+    {
+        "question": "De quel côté du lit, je dors habituellement ?",
+        "answers": ["Gauche", "Droite", "Au milieu", "Ça change tout le temps"],
+        "correct": 1
+    },
+    {
+        "question": "Ma deuxième couleur préférée ?",
+        "answers": ["Jaune", "Rouge", "Rose", "Orange"],
+        "correct": 3
+    },
+    {
+        "question": "Si notre chat pouvait parler, quelle serait sa première phrase ?",
+        "answers": ["'Donne-moi à manger !'", "'Arrêtez de vous faire des bisous'", "'Je vous aime'", "'Laisse-moi dormir'"],
+        "correct": 1
+    },
+    {
+        "question": "Depuis combien de jours, exactement, sommes-nous ensemble ?",
+        "answers": ["1117 jours", "1118 jours", "1119 jours", "1120 jours"],
+        "correct": 3
+    }
+]
